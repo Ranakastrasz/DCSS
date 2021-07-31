@@ -61,9 +61,7 @@ item += useless_item:darkgrey
 ### Potions ###
 
 item += potions? of.*(curing|flight):lightgrey
-: if you.race() == "Vampire" then
-  item += potions? of blood:lightgrey
-: end
+
 item += potions? of.*berserk:brown
 item += potions? of.*might:yellow
 item += potions? of.*cancellation:cyan
@@ -71,7 +69,7 @@ item += potions? of.*cancellation:cyan
 item += potions? of.*ambrosia:blue
 item += potions? of.*experience:lightred
 item += potions? of.*heal wounds:white
-item += potions? of.*(resistance|agility):green
+item += potions? of.*(resistance):green
 item += potions? of.*(haste|invisibility):lightgreen
 item += potions? of.*mutation:lightcyan
 item += potions? of.*brilliance:magenta
@@ -97,7 +95,6 @@ item += scroll.*(silence|vulnerability|immolation):blue
 item += scroll.*remove curse:lightgrey
 item += scroll.*(fog|teleport):green
 item += scroll.*(fear|blink):lightgreen
-item += scroll.*(recharging):magenta
 item += scroll.*(enchant|brand weapon):lightmagenta
 
 ### Wands ###
@@ -106,19 +103,18 @@ item += scroll.*(enchant|brand weapon):lightmagenta
 item += wand of.*random effects:blue
 
 # Single target piercing.
-item += wand of.*lightning:brown
 item += wand of.*acid:yellow
 
-item += wand of.*flame:lightgrey
+item += wand of.*flame:brown
 item += wand of.*clouds:white
 
 item += wand of.*digging:green
 
-# Single-turn AOE
+# Explosion
 item += wand of.*iceblast:cyan
-item += wand of.*scattershot:lightcyan
 
-item += wand of.*(disintegration|confusion|polymorph):magenta
+# MR-checking
+item += wand of.*(disintegration|polymorph):magenta
 item += wand of.*(paralysis|enslavement):lightmagenta
 
 ### General Identification ###
@@ -217,9 +213,6 @@ menu += green:( ration)
 
 ### Potions ###
 
-: if you.race() == "Vampire" then
-  menu += lightgrey:potions? of blood
-: end
 menu += lightgrey:potions? of.*(curing|flight)
 menu += brown:potions? of.*berserk
 menu += yellow:potions? of.*might
@@ -228,7 +221,7 @@ menu += cyan:potions? of.*cancellation
 menu += blue:potions? of.*(lignification|ambrosia)
 menu += lightred:potions? of.*experience
 menu += white:potions? of.*heal wounds
-menu += green:potions? of.*(resistance|agility)
+menu += green:potions? of.*resistance
 menu += lightgreen:potions? of.*(haste|invisibility)
 menu += lightcyan:potions? of.*mutation
 menu += magenta:potions? of.*brilliance
@@ -254,7 +247,6 @@ menu += blue:scroll.*(noise|silence|vulnerability|immolation)
 menu += lightgrey:scroll.*remove curse
 menu += green:scroll.*(fog|teleport)
 menu += lightgreen:scroll.*(fear|blink)
-menu += magenta:scroll.*(recharging)
 menu += lightmagenta:scroll.*(enchant|brand weapon)
 
 ### Wands ###
@@ -272,7 +264,6 @@ menu += green:wand of.*digging
 
 # Explosion
 menu += cyan:wand of.*iceblast
-menu += lightcyan:wand of.*scattershot
 
 # MR-checking
 menu += magenta:wand of.*(disintegration|polymorph)
@@ -310,7 +301,12 @@ autofight_warning = 250
 #autofight_throw_nomove = false
 
 # If you are actually injuried, autofight is probably a terrible idea.
+# Deep dwarfs get a bit more leeway because they don't naturally regen.
+: if you.race() == "Deep Dwarf" then
 autofight_stop = 75
+: else
+autofight_stop = 90
+: end
 
 delay_safe_poison = 10:5
 
@@ -419,6 +415,9 @@ ae += <dart
 ae += <stone|sling bullet
 ae += <boomerang
 ae += <arrow|bolt
+
+# Excluded for some reason.
+ae += <tin of tremorstones
 
 : if you.race() == "Troll" or you.race() == ogre then
 	ae += <large rock
@@ -809,6 +808,13 @@ more += The mighty Pandemonium lord.*resides here
   more += Your?.*suddenly stops? moving
   more += LOW HITPOINT WARNING
 
+  more += You are contaminated with residual magic.
+  more += You are heavily infused with residual magic.
+  more += You are practically glowing with residual magic!
+  more += Your entire body has taken on an eerie glow!
+  more += You are engulfed in a nimbus of crackling magics!
+  
+
 # Extra flashes
 
 flash := flash_screen_message
@@ -828,6 +834,14 @@ more += (?<!your )(Orb of Fire|Shining eye|Cacodemon|Neqoxec)
   flash += Strange energies course through your body
   more += Strange energies course through your body
   
+# Contamination
+
+  flash += You are contaminated with residual magic. 
+  flash += You are heavily infused with residual magic.
+  flash += You are practically glowing with residual magic!
+  flash += Your entire body has taken on an eerie glow!
+  flash += You are engulfed in a nimbus of crackling magics!
+
 
 # Summon Failure
 flash += doesn't seem very happy
@@ -883,6 +897,7 @@ ability_slot += Enter the Abyss:E
 # remaining spells. Use upper-case letters for spells like Blink that are
 # dangerous to miss-key.
 
+spell_slot += Absolute Zero:zbtlr
 spell_slot += Alistair's intoxication:txc
 spell_slot += Apportation:aoi
 spell_slot += Airstrike:ktA
@@ -891,12 +906,9 @@ spell_slot += Agony:yng
 spell_slot += Animate dead:dmn
 spell_slot += Animate skeleton:snk
 spell_slot += Beastly appendage:eau
-spell_slot += Blade hands:aeu
-spell_slot += Blink:IOA
-spell_slot += Bolt of cold:bcd
-spell_slot += Bolt of draining:bdg
-spell_slot += Bolt of fire:bft
-spell_slot += Bolt of magma:bmt
+spell_slot += Blade hands:bhld
+spell_slot += Blink:IOAE
+spell_slot += Bolt of magma:bmtg
 spell_slot += Borgnjor's revivification:OEI
 spell_slot += Borgnjor's vile clutch:vbc
 spell_slot += Call canine familiar:fcn
@@ -906,42 +918,38 @@ spell_slot += Controlled blink:oia
 spell_slot += Corona:zcn
 spell_slot += Chain lightning:cln
 spell_slot += Confusing touch:oui
-spell_slot += Confuse:cfn
 spell_slot += Conjure flame:cfj
 spell_slot += Corpse rot:crt
-spell_slot += Dazzling spray:dyz
+spell_slot += Dazzling Flash:dzlf
 spell_slot += Darkness:aed
-spell_slot += Death channel:eao
-spell_slot += Death's door:EAS
-spell_slot += Deflect missiles:eia
-spell_slot += Discord:DCS
-spell_slot += Disjunction:iuo
+spell_slot += Death channel:dtcl
+spell_slot += Death's door:EAOI
+spell_slot += Discord:DCSR
+spell_slot += Disjunction:iuoe
 spell_slot += Dispel undead:ndp
 spell_slot += Dispersal:iea
-spell_slot += Dragon form:aou
+spell_slot += Dragon form:dgrf
 spell_slot += Dragon's call:dcl
 spell_slot += Ensorcelled hibernation:zxc
 spell_slot += Excruciating wounds:eao
 spell_slot += Fire storm:fmt
 spell_slot += Fireball:fbl
-spell_slot += Flame tongue:zfm
-spell_slot += Force lance:flc
+spell_slot += Foxfire:fxr
 spell_slot += Freezing cloud:fcg
 spell_slot += Freeze:zfr
+spell_slot += Frozen Ramparts:rptzf
 spell_slot += Fulminant prism:fpm
 spell_slot += Gell's Gravitas:gvt
-spell_slot += Glaciate:gct
 spell_slot += Haunt:htn
-spell_slot += Hydra form:aou
-spell_slot += Ice form:ieo
+spell_slot += Hydra form:hydf
+spell_slot += Ice form:crmf
 spell_slot += Ignition:ntg
-spell_slot += Iron shot:stn
+spell_slot += Iron shot:stnr
 spell_slot += Infusion:uoi
 spell_slot += Inner flame:frn
 spell_slot += Invisibility:ieI
 spell_slot += Irradiate:rtd
 spell_slot += Iskenderun's battlesphere:bnk
-spell_slot += Iskenderun's mystic blast:mbt
 spell_slot += Leda's Liquefaction:eai
 spell_slot += Lee's rapid deconstruction:ldr
 spell_slot += Lesser Beckoning:lbg
@@ -961,11 +969,9 @@ spell_slot += Pain:zpn
 spell_slot += Passage of golubria:uoi
 spell_slot += Passwall:aeu
 spell_slot += Petrify:pyt
-spell_slot += Poison arrow:pwr
 spell_slot += Poisonous vapours:pvs
 spell_slot += Portal projectile:oei
 spell_slot += Recall:eau
-spell_slot += Regeneration:eio
 spell_slot += Ring of flames:oia
 spell_slot += Sandblast:zst
 spell_slot += Searing ray:sry
@@ -976,19 +982,19 @@ spell_slot += Shroud of golubria:oua
 spell_slot += Simulacrum:scm
 spell_slot += Silence:SLC
 spell_slot += Slow:swh
-spell_slot += Song of slaying:oai
+spell_slot += Song of slaying:oaie
 spell_slot += Spectral weapon:eao
 spell_slot += Spellforged servitor:svt
-spell_slot += Spider form:ieo
+spell_slot += Spider form:sprf
 spell_slot += Static discharge:tdc
-spell_slot += Statue form:aeo
+spell_slot += Statue form:stmf
 spell_slot += Sticks to snakes:tkc
 spell_slot += Sticky flame:yfk
-spell_slot += Sting:zpt
+spell_slot += Sting:zptg
 spell_slot += Stone arrow:wtn
 spell_slot += Summon butterflies:uei
-spell_slot += Summon demon:dsm
-spell_slot += Summon forest:ftm
+spell_slot += Summon demon:dsmn
+spell_slot += Summon forest:ftms
 spell_slot += Summon greater demon:gds
 spell_slot += Summon guardian golem:gds
 spell_slot += Summon horrible things:hts
@@ -997,15 +1003,11 @@ spell_slot += Summon ice beast:bct
 spell_slot += Summon lightning spire:lst
 spell_slot += Summon mana viper:vms
 spell_slot += Summon small mammal:zsm
-spell_slot += Swiftness:iea
-spell_slot += Teleport other:tpT
-spell_slot += Throw frost:ftw
-spell_slot += Throw flame:fmw
-spell_slot += Throw icicle:cwt
+spell_slot += Swiftness:ieao
+spell_slot += Teleport other:tprh
 spell_slot += Tornado:TDN
 spell_slot += Tukima's Dance:dkc
 spell_slot += Vampiric draining:vnd
-spell_slot += Venom bolt:bvm
 spell_slot += Yara's violent unraveling:yvg
 
 # Default letters
@@ -1042,6 +1044,7 @@ item_slot += ring of magical power : Ww
 item_slot += \+[0-9]+ ring of dexterity : Dd
 item_slot += \+[0-9]+ ring of slaying : Yy
 item_slot += ring of wizardry : Zz
+item_slot += ration : q
 
 ########################
 ### Autoinscriptions ###
@@ -1075,6 +1078,8 @@ ai := autoinscribe
 
 ai += (bad|dangerous)_item.*potion:!q
 ai += (bad|dangerous)_item.*scroll:!r
+
+# Double Confirmation
 ai += potions? of berserk rage:!q
 ai += scrolls? of silence:!r
 
@@ -1092,13 +1097,12 @@ ai += potions? of haste:@q3
 ai += scrolls? of teleportation:@r4
 ai += identify:@r1
 ai += remove curse:@r2
-ai += blowgun:@w1
 ai += ( ration):@e1
 
 ai += throwing net:=f
-ai += datura:Berserk =f
-ai += atropa:Blindness =f
-ai += curare:Toxic =f
+ai += datura:Berserk:=f
+ai += atropa:Blindness:=f
+ai += curare:Toxic:=f
 
 #ai += potion:!q
 #ai += scroll:!r
@@ -1141,45 +1145,6 @@ dump_book_spells = false
 ### Lua ###
 ###########
 
-{
-
-  -- Cancer Monsters
-  fm_danger = {"Unarmed Combat", "Short Blades", "Long Blades", "Axes",
-                 "Maces & Flails", "Polearms", "Staves"}
---fm_danger = {
---  "orb of fire",
---  "shining eye",
---  "cacodemon",
---  "neqoxec",
---  "troll"
---	}
-
-	function danger()
-	  --los = you.los()
-	  --for i = -los,los do
-		--for j = -los,los do
-		--  local mm = monster.get_monster_at (i,j)
-		--  if mm then
-		--	local mon_threat = mm:threat()
-		--	local mon_name = mm:name()
-		--	-- if util.contains(danger_patterns,mon_name) == true then
-		--	--   crawl.mpr("CANCER! " .. mon_name .." !!!!!!", 5)
-		--	--   crawl.more()
-		--	-- end
-		--	if mon_threat == 3 then
-		--	  crawl.mpr("DANGER! " .. mon_name .." !!!!!!", 5)
-		--	  crawl.more()
-		--	end
-		--	if mon_threat == 2 then
-		--	  crawl.mpr(mon_name, 5)
-		--	  crawl.more()
-		--	end
-		--  end
-		--end
-	  --end
-	end
-
-}
 
 {
 -- Equipment autopickup (by Medar and various others)
