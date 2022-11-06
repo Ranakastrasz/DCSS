@@ -370,7 +370,8 @@ travel_key_stop = false
 explore_auto_rest = true
 
 warn_hatches = true
-travel_open_doors = true # change to avoid if stealth rating above, say, 50.
+travel_open_doors = true
+# change to avoid if stealth rating above, say, 50.
 
 ################
 # Keybindings to override the vi movement keys.
@@ -434,7 +435,7 @@ auto_exclude += Sojobo, Sonja, Terence, The Lernaean hydra, The Royal Jelly, The
 ##################
 
 # Add staves, rods, misc; note you can't use += with this option.
-autopickup = $?!+=/%}
+autopickup = $?!+=/}|
 
 #All useful, at least early game.
 #Its only later that you would want to just remove these.
@@ -449,6 +450,11 @@ ae += <boomerang
 	ae += <large rock
 : end
 
+ae += <curare-tipped dart
+
+ae ^= <spellbook
+ae ^= <staff
+autopickup_exceptions ^= <tin of tremorstones
 
 
 # Exceptions
