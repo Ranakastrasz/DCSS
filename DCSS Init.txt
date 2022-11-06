@@ -20,6 +20,23 @@
 #"black", "blue", "green", "cyan", "red", "magenta", "brown",
 #  "lightgrey", "darkgrey", "lightblue", "lightgreen", "lightcyan",
 #  "lightred", "lightmagenta", "yellow", "white"
+# black
+# blue - Dangerous
+# green - Generally good
+# cyan - Conditional
+# red - Extremely bad
+# magenta - magic bias?
+# brown
+# lightgrey - Default
+# darkgrey - worthless
+# lightblue
+# lightgreen
+# lightcyan
+# lightred - very good
+# lightmagenta
+# yellow
+# white - Epic level.
+
 
 view_delay = 300
 hp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
@@ -27,14 +44,14 @@ mp_colour = 100:green, 99:lightgray, 75:yellow, 50:lightred, 25:red
 hp_warning = 50
 mp_warning = 50
 
-# enemy_hp_colour = green green brown brown red magenta 
+# enemy_hp_colour = green green brown brown red magenta
 
-enemy_hp_colour = green lightgreen yellow lightred red magenta 
-monster_list_colour =
-monster_list_colour += friendly:green,neutral:brown
-monster_list_colour += good_neutral:brown,strict_neutral:brown
-monster_list_colour += trivial:darkgrey,easy:lightgrey
-monster_list_colour += tough:yellow,nasty:lightred
+#enemy_hp_colour = green lightgreen yellow lightred red magenta
+#monster_list_colour =
+#monster_list_colour += friendly:green,neutral:brown
+#monster_list_colour += good_neutral:brown,strict_neutral:brown
+#monster_list_colour += trivial:darkgrey,easy:lightgrey
+#monster_list_colour += tough:yellow,nasty:lightred
 
 ###############
 ### Console ###
@@ -60,87 +77,92 @@ item += useless_item:darkgrey
 
 ### Potions ###
 
-item += potions? of.*(curing|flight):lightgrey
-
 item += potions? of.*berserk:brown
+item += potions? of.*mutation:lightcyan
+
+item += potions? of.*(lignification|ambrosia):blue
+item += potions? of.*haste:green
 item += potions? of.*might:yellow
+item += potions? of.*resistance:lightgreen
+
+item += potions? of.*heal wounds:white
+item += potions? of.*curing:lightblue
 item += potions? of.*cancellation:cyan
 
-item += potions? of.*ambrosia:blue
-item += potions? of.*experience:lightred
-item += potions? of.*heal wounds:white
-item += potions? of.*(resistance):green
-item += potions? of.*(haste|invisibility):lightgreen
-item += potions? of.*mutation:lightcyan
 item += potions? of.*brilliance:magenta
 item += potions? of.*magic:lightmagenta
+
+item += potions? of.*experience:lightred
+
+
+item += potions? of.*(flight|invisibility|attraction):lightgreen
+
 
 ### Scrolls ###
 
 : if you.race() == "Vampire" or you.race() == "Mummy"
 :  or you.race() == "Ghoul" then
-  item += scroll.*holy word:darkgrey
   item += scroll.*torment:brown
 : else
-  item += scroll.*holy word:brown
   item += scroll.*torment:darkgrey
 : end
 
-item += scroll.*acquirement:white
+item += scroll.*poison:brown
+
+item += scroll.*acquirement:lightred
 item += scroll.*(summoning):yellow
-item += scroll.*identify:cyan
+item += scroll.*identify:white
 item += scroll.*magic mapping:lightcyan
 
 item += scroll.*(silence|vulnerability|immolation):blue
-item += scroll.*remove curse:lightgrey
-item += scroll.*(fog|teleport):green
+item += scroll.*(fog|butterflies|teleport):green
 item += scroll.*(fear|blink):lightgreen
 item += scroll.*(enchant|brand weapon):lightmagenta
 
 ### Wands ###
 
-# Sometimes dangerous
-item += wand of.*random effects:blue
-
 # Single target piercing.
-item += wand of.*acid:yellow
+item += wand of.*(acid|light|quicksilver):yellow
 
-item += wand of.*flame:brown
-item += wand of.*clouds:white
+item += wand of.*flame:lightgrey
 
 item += wand of.*digging:green
 
-# Explosion
-item += wand of.*iceblast:cyan
+# Single-turn AOE
+item += wand of.*(iceblast|roots):cyan
 
 # MR-checking
-item += wand of.*(disintegration|polymorph):magenta
-item += wand of.*(paralysis|enslavement):lightmagenta
+item += wand of.*(mindburst|polymorph):magenta
+item += wand of.*(paralysis|charming):lightmagenta
 
 ### General Identification ###
+item += manual of:cyan
+item += manual:lightcyan
+item += unidentified.*book:lightmagenta
+item += unidentified.*(potion|scroll|jewellery|wand|magical staff).*:lightblue
+
 item += (identified|known).*(jewellery|magical staff):brown
 item += identified.*spellbook:magenta
-item += unidentified.*(potion|scroll|jewellery|wand|magical staff).*:lightblue
-item += unidentified.*book:lightmagenta
-item += manual:lightcyan
-item += manual of:cyan
 
 ### Jewellery ###
-item += known.*(ring of (dexterity|strength|intelligence|slaying|evasion|protection(?! from))|amulet of reflection):magenta
+item += known.*ring of (dexterity|strength|intelligence):lightcyan
+item += known.*ring of (evasion|protection|slaying):lightmagenta
+item += known.*ring of (protection from|resist corrosion|poison resistance|positive energy|willpower):green
+item += known.*ring of (wizardry|magical power):magenta
+item += known.*ring of (fire|ice):cyan
+
+item += known.*amulet of (the acrobat|guardian spirit|reflection):lightgreen
+item += known.*amulet of.*regeneration:lightred
+item += known.*amulet of faith:cyan
+
 item += identified.*artefact.*(jewellery):white
 item += unidentified.*artefact.*(jewellery).*:lightmagenta
-item += (a )?stones?$:lightgray
 
-### Food ###
-item += chunks?.*flesh:lightgrey
-item += evil_eating.*chunk:red
-
-item += ( ration):green
 
 # Want this to override anything above
 item += useless:darkgrey
 # Only mark these types when forbidden; for other types it looks odd.
-item += forbidden.*(potion|scroll|food):red
+item += forbidden.*(potion|scroll):red
 
 mons := mon_glyph
 # Monsters that can be easy to miss
@@ -202,72 +224,61 @@ menu += pickup:lightred:god gift
 menu += inventory:white:\w \+\s
 menu += inventory:white:\w \#\s
 
-### Food ###
-# Color chunks, put ordinary ones on lightgrey.
-menu += red:evil_eating.*chunk
-menu += blue:mutagenic.*chunk
-menu += lightgrey: +(chunks?$|chunks? +)
-# Other food
-
-menu += green:( ration)
-
 ### Potions ###
 
-menu += lightgrey:potions? of.*(curing|flight)
+
 menu += brown:potions? of.*berserk
-menu += yellow:potions? of.*might
-menu += cyan:potions? of.*cancellation
+menu += lightcyan:potions? of.*mutation
 
 menu += blue:potions? of.*(lignification|ambrosia)
-menu += lightred:potions? of.*experience
+menu += green:potions? of.*haste
+menu += yellow:potions? of.*might
+menu += lightgreen:potions? of.*resistance
+
 menu += white:potions? of.*heal wounds
-menu += green:potions? of.*resistance
-menu += lightgreen:potions? of.*(haste|invisibility)
-menu += lightcyan:potions? of.*mutation
+menu += lightblue:potions? of.*curing
+menu += cyan:potions? of.*cancellation
+
 menu += magenta:potions? of.*brilliance
 menu += lightmagenta:potions? of.*magic
+
+menu += lightred:potions? of.*experience
 
 ### Scrolls ###
 
 : if you.race() == "Vampire" or you.race() == "Mummy"
 :  or you.race() == "Ghoul" then
-  menu += darkgrey:scroll.*holy word
   menu += brown:scroll.*torment
 : else
-  menu += brown:scroll.*holy word
   menu += darkgrey:scroll.*torment
 : end
+menu += brown:scroll.*poison
 
-menu += white:scroll.*acquirement
+menu += lightred:scroll.*acquirement
 menu += yellow:scroll.*(summoning)
-menu += cyan:scroll.*identify
+menu += white:scroll.*identify
 menu += lightcyan:scroll.*magic mapping
 
-menu += blue:scroll.*(noise|silence|vulnerability|immolation)
-menu += lightgrey:scroll.*remove curse
-menu += green:scroll.*(fog|teleport)
+menu += blue:scroll.*(silence|vulnerability|immolation)
+menu += green:scroll.*(fog|butterflies|teleport)
 menu += lightgreen:scroll.*(fear|blink)
 menu += lightmagenta:scroll.*(enchant|brand weapon)
 
 ### Wands ###
 
-# Can be harmful
-menu += blue:wand of.*random effects
+# Single target piercing.
+menu += yellow:wand of.*(acid|light|quicksilver)
 
-# Damaging beam.
-menu += brown:wand of.*flame
-menu += yellow:wand of.*acid
-
-menu += white:wand of.*clouds
+menu += lightgrey:wand of.*flame
 
 menu += green:wand of.*digging
 
 # Explosion
-menu += cyan:wand of.*iceblast
+menu += cyan:wand of.*(iceblast|roots)
 
 # MR-checking
-menu += magenta:wand of.*(disintegration|polymorph)
-menu += lightmagenta:wand of.*(paralysis|enslavement)
+menu += magenta:wand of.*(mindburst|polymorph)
+menu += lightmagenta:wand of.*(paralysis|charming)
 
 ### General identification ###
 
@@ -276,11 +287,31 @@ menu += lightcyan:manual
 menu += lightmagenta:unidentified.*artefact.*
 menu += white:.*artefact.*
 menu += lightblue:unidentified .*(potion|scroll|wand|jewellery|spellbook|rod|magical staff)
-menu += magenta:.*known .*(ring of (dexterity|strength|intelligence|slaying|evasion|protection(?! from))|amulet of reflection)
+
 menu += inventory:lightgray:.*(book|jewellery|magical staff)
 # Ego items
 menu += lightblue:unidentified.*weapon.*(runed|glowing|enchanted)
 menu += lightblue:unidentified.*armour.*(runed|glowing|embroidered|shiny|dyed)
+
+### Jewllery ###
+
+
+menu += magenta:
+
+
+menu += lightcyan:known.*ring of (dexterity|strength|intelligence)
+menu += lightmagenta:known.*ring of (evasion|protection|slaying)
+menu += green:known.*ring of (protection from|resist corrosion|poison resistance|positive energy|willpower)
+menu += magenta:known.*ring of (wizardry|magical power)
+menu += cyan:known.*ring of (fire|ice)
+
+menu += lightgreen:known.*amulet of (the acrobat|guardian spirit|reflection)
+menu += lightred:known.*amulet of.*regeneration
+menu += cyan:known.*amulet of faith
+
+menu += white:identified.*artefact.*(jewellery)
+menu += lightmagenta:unidentified.*artefact.*(jewellery).*
+
 
 #################
 ### Interface ###
@@ -290,7 +321,7 @@ default_manual_training = true
 equip_unequip = true
 sort_menus = true:equipped,identified,basename,art,ego,glowing,qualname,curse,charged,slot
 
-# 
+#
 show_more = false
 autofight_caught = true
 
@@ -316,11 +347,6 @@ bindkey = [^I] CMD_AUTOFIGHT_NOMOVE
 # Move as normal on g.
 bindkey = [g] CMD_AUTOFIGHT
 
-auto_butcher = true
-auto_butcher_max_chunks = 10
-easy_eat_chunks = true
-
-
 
 runrest_ignore_message ^= You feel.*sick
 
@@ -344,7 +370,7 @@ travel_key_stop = false
 explore_auto_rest = true
 
 warn_hatches = true
-travel_open_doors = false
+travel_open_doors = true # change to avoid if stealth rating above, say, 50.
 
 ################
 # Keybindings to override the vi movement keys.
@@ -382,29 +408,33 @@ bindkey = [N] CMD_NO_CMD_DEFAULT
 ################
 
 ## dangerous monsters ##
-auto_exclude += ancient lich, death drake, hydra, ice statue, jelly, orb of fire
+auto_exclude += ancient lich, dread lich, death drake, hydra, ice statue, jelly, orb of fire, .*priest, .*wizard, .*sorcerer, .*demonologist,
 
 ## Cancer Monsters
 auto_exclude += orb of fire, Shining eye, Cacodemon, Neqoxec
 
-## paralysing monsters and uniques ##
-auto_exclude += [^c] wizard, ancient lich, Ereshkigal, Erolcha, eyeball, Grinder, Jory, lich
-auto_exclude += Norris, ogre-mage, orb of eyes, orc sorcerer, Rupert, sphinx, vampire knight
+## paralysing monsters##
+auto_exclude += ancient lich, dread lich, basilisk
+auto_exclude += Great orb of eyes, Ogre mage, Orc sorcerer, Sphinx, Vampire knight
+auto_exclude += Cacodemon, Deep elf archer, imperial myrmidon, Orc wizard, Sphinx, Vampire
 
-## other uniques and unique followers ##
-auto_exclude += Agnes, Aizul, Arachne, Asterion, Blork, Boris, Crazy Yiuf, Donald, Dowan
-auto_exclude += Duvessa, Edmund, Erica, Eustachio, Fannar, Frances, Frederick, Gastronok
-auto_exclude += Grum, Harold, Ijyb, Jessica, Jorgrun, Joseph, Kirke, Louise, Mara, Maud
-auto_exclude += Maurice, Menkaure, Mennas, Natasha, Nergalle, Nessos, Nikola, Pikel
-auto_exclude += Polyphemus, Prince Ribbit, Psyche, Roxanne, Saint Roka, Sigmund, Snorg
-auto_exclude += Sojobo, Sonja, Terence, Urug, Wiglaf, Xtahua, hog, slave
+## demon summoners
+auto_exclude += Hellbinder, Shadow demon, Dread lich,
+
+## uniques and unique followers ##
+auto_exclude += 27-headed, Agnes, Aizul, Antaeus, Arachne, Asmodeus, Amaemon, Asterion, Azrael, Bai Suzhen, Blork, Cerebov, Boris, Crazy Yiuf, Dispater, Dissolution, Donald, Dowan
+auto_exclude += Duvessa, Edmund, Enchantress, Ereshkigal, Erica, Erolcha, Eustachio, Fannar, Frances, Frederick, Gastronok, Geryon, Gloorx Vloq
+auto_exclude += Grinder, Grum, Grunn, Harold, Ignacio, Ijyb, Ilsuiw, Jessica, Jorgrun, Jory, Joseph, Josephine, Josephina, Khufu, Kirke, Lom Lobon, Lodul, Louise, Mara, Maggie, Margery
+auto_exclude += Maurice, Menkaure, Mennas, Mnoleg, Muray, Mlioglotl, Natasha, Nergalle, Nessos, Nikola, Norris
+auto_exclude += Pargi, Parghit, Pikel, Polyphemus, Prince Ribbit, Psyche, Robin, Roxanne, Rupert, Saint Roka, Sigmund, Snorg
+auto_exclude += Sojobo, Sonja, Terence, The Lernaean hydra, The Royal Jelly, The Serpent of Hell, Tiamat, Urug, Vashnia, Vv the Exile, Xtahua, Zenata, hog, lemure
 
 ##################
 ### Autopickup ###
 ##################
 
 # Add staves, rods, misc; note you can't use += with this option.
-autopickup = $?!:"/%}|\
+autopickup = $?!+=/%}
 
 #All useful, at least early game.
 #Its only later that you would want to just remove these.
@@ -412,12 +442,8 @@ ae := autopickup_exceptions
 ae += <throwing net
 ae += <javelin
 ae += <dart
-ae += <stone|sling bullet
+ae += <stone
 ae += <boomerang
-ae += <arrow|bolt
-
-# Excluded for some reason.
-ae += <tin of tremorstones
 
 : if you.race() == "Troll" or you.race() == ogre then
 	ae += <large rock
@@ -429,9 +455,6 @@ ae += <tin of tremorstones
 # I use immolation somewhat early on, and vulnerability is useful the entire
 # game.
 ae += <vulnerability|immolation
-# Tend to not use these.
-# ae += >scrolls? of silence
-ae += >(crystal ball of energy|disc of storm)
 # Don't ever need a second stave
 ae += staff of .*
 
@@ -574,6 +597,7 @@ more += Arachne.*(comes? into view|opens the|appears? from)
 more += Asmodeus.*(comes? into view|opens the|appears? from)
 more += Asterion.*(comes? into view|opens the|appears? from)
 more += Azrael.*(comes? into view|opens the|appears? from)
+more += Bai Suzhen.*(comes? into view|opens the|appears? from)
 more += Blork the orc.*(comes? into view|opens the|appears? from)
 more += Boris.*(comes? into view|opens the|appears? from)
 more += Cerebov.*(comes? into view|opens the|appears? from)
@@ -591,7 +615,6 @@ more += Erolcha.*(comes? into view|opens the|appears? from)
 more += Eustachio.*(comes? into view|opens the|appears? from)
 more += Fannar.*(comes? into view|opens the|appears? from)
 more += Frances.*(comes? into view|opens the|appears? from)
-more += Francis.*(comes? into view|opens the|appears? from)
 more += Frederick.*(comes? into view|opens the|appears? from)
 more += Gastronok.*(comes? into view|opens the|appears? from)
 more += Geryon.*(comes? into view|opens the|appears? from)
@@ -602,20 +625,20 @@ more += Harold.*(comes? into view|opens the|appears? from)
 more += Ignacio.*(comes? into view|opens the|appears? from)
 more += Ijyb.*(comes? into view|opens the|appears? from)
 more += Ilsuiw.*(comes? into view|opens the|appears? from)
+more += Jessica.*(comes? into view|opens the|appears? from)
 more += Jorgrun.*(comes? into view|opens the|appears? from)
 more += Jory.*(comes? into view|opens the|appears? from)
-more += Jessica.*(comes? into view|opens the|appears? from)
 more += Joseph.*(comes? into view|opens the|appears? from)
 more += Josephine.*(comes? into view|opens the|appears? from)
-more += Jozef.*(comes? into view|opens the|appears? from)
+more += Josephina.*(comes? into view|opens the|appears? from)
 more += Khufu.*(comes? into view|opens the|appears? from)
 more += Kirke.*(comes? into view|opens the|appears? from)
-more += Lamia.*(comes? into view|opens the|appears? from)
 more += Lom Lobon.*(comes? into view|opens the|appears? from)
+more += Lodul.*(comes? into view|opens the|appears? from)
 more += Louise.*(comes? into view|opens the|appears? from)
 more += Mara.*(comes? into view|opens the|appears? from)
+more += Maggie.*(comes? into view|opens the|appears? from)
 more += Margery.*(comes? into view|opens the|appears? from)
-more += Maud.*(comes? into view|opens the|appears? from)
 more += Maurice.*(comes? into view|opens the|appears? from)
 more += Menkaure.*(comes? into view|opens the|appears? from)
 more += Mennas.*(comes? into view|opens the|appears? from)
@@ -626,11 +649,12 @@ more += Nergalle.*(comes? into view|opens the|appears? from)
 more += Nessos.*(comes? into view|opens the|appears? from)
 more += Nikola.*(comes? into view|opens the|appears? from)
 more += Norris.*(comes? into view|opens the|appears? from)
+more += Pargi.*(comes? into view|opens the|appears? from)
+more += Parghit.*(comes? into view|opens the|appears? from)
 more += Pikel.*(comes? into view|opens the|appears? from)
 more += Polyphemus.*(comes? into view|opens the|appears? from)
 more += Prince Ribbit.*(comes? into view|opens the|appears? from)
 more += Psyche.*(comes? into view|opens the|appears? from)
-more += Purgy.*(comes? into view|opens the|appears? from)
 more += Robin.*(comes? into view|opens the|appears? from)
 more += Roxanne.*(comes? into view|opens the|appears? from)
 more += Rupert.*(comes? into view|opens the|appears? from)
@@ -648,6 +672,7 @@ more += Urug.*(comes? into view|opens the|appears? from)
 more += Vashnia.*(comes? into view|opens the|appears? from)
 more += Wiglaf.*(comes? into view|opens the|appears? from)
 more += Xtahua.*(comes? into view|opens the|appears? from)
+more += Zenata.*(comes? into view|opens the|appears? from)
 
 # Any uniques and any pan lords
 more += (?-i:[A-Z]).* comes? into view
@@ -715,7 +740,7 @@ stop += something tasty in your inventory
 # ignore += grinding sound
 # ignore += contamination has completely
 # ignore += your breath back
-# 
+#
 # ignore += pray:
 # ignore += talk:
 # ignore += talk_visual:
@@ -745,11 +770,11 @@ more += Found a staircase to the
 
 more += Found a staircase to the Ecumenical Temple
 more += The mighty Pandemonium lord.*resides here
-  
+
   #############################
   # Bad and Unexpected Things #
   #############################
-  
+
   # Bad things happening to you
   more += corrodes your equipment
   more += Your corrosive artefact corrodes you
@@ -813,7 +838,7 @@ more += The mighty Pandemonium lord.*resides here
   more += You are practically glowing with residual magic!
   more += Your entire body has taken on an eerie glow!
   more += You are engulfed in a nimbus of crackling magics!
-  
+
 
 # Extra flashes
 
@@ -833,10 +858,10 @@ more += (?<!your )(Orb of Fire|Shining eye|Cacodemon|Neqoxec)
 
   flash += Strange energies course through your body
   more += Strange energies course through your body
-  
+
 # Contamination
 
-  flash += You are contaminated with residual magic. 
+  flash += You are contaminated with residual magic.
   flash += You are heavily infused with residual magic.
   flash += You are practically glowing with residual magic!
   flash += Your entire body has taken on an eerie glow!
@@ -847,7 +872,7 @@ more += (?<!your )(Orb of Fire|Shining eye|Cacodemon|Neqoxec)
 flash += doesn't seem very happy
 
 # Need a Summons turn hostile/are hostile
-# 
+#
 
 
 ##########
@@ -860,7 +885,7 @@ bindkey = [~] CMD_LUA_CONSOLE
 
 # Replacing VI keys, so
 # yughjkbn are free.
-# 
+#
 # I is blink
 # o is self-enhancement
 # z is starting blast
@@ -1100,9 +1125,9 @@ ai += remove curse:@r2
 ai += ( ration):@e1
 
 ai += throwing net:=f
-ai += datura:Berserk:=f
-ai += atropa:Blindness:=f
-ai += curare:Toxic:=f
+ai += datura:Berserk =f
+ai += atropa:Blindness =f
+ai += curare:Toxic =f
 
 #ai += potion:!q
 #ai += scroll:!r
@@ -1126,7 +1151,7 @@ note_messages += cast .* Abyss
 
 # Noteable monsters
 # Undead
-note_monsters += ancient lich,curse skull,curse toe,greater mummy
+note_monsters += ancient lich, dread lich,curse skull,curse toe,greater mummy
 # Depths
 note_monsters += caustic shrike
 # Special hall_of_zot spawns
@@ -1532,12 +1557,10 @@ function ready()
   force_mores()
   -- char_defaults.lua
   char_defaults()
-  
+
   -- AnnounceDamage()
   AnnounceDamage()
 
-  -- Danger Test
-  danger()
 
 end
 }
@@ -1688,6 +1711,8 @@ end
     was_berserk_last_turn = you_are_berserk
   end
 }
+
+
 #############
 ### Debug ###
 #############
