@@ -601,8 +601,12 @@ flash += doesn't seem very happy
 ##########
 
 bindkey = [~] CMD_LUA_CONSOLE
- macros += M [ ===load_char_defaults
-# macros += M ] ===save_char_defaults
+macros += M [ ===load_char_defaults
+macros += M ] ===save_char_defaults
+macros += M o ===enhanced_explore
+
+macros += M + ,
+
 
 # Replacing VI keys, so
 # yughjkbn are free.
@@ -1283,8 +1287,6 @@ function enhanced_explore()
    end
 end
 }
-macros += M o ===enhanced_explore
-
 # Ask HilariousDeathArtist to fix things
 
 # To use this you must add have a call to AnnounceDamage() in the ready() function like below:
