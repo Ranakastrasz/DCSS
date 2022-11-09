@@ -349,7 +349,7 @@ bindkey = [^I] CMD_AUTOFIGHT_NOMOVE
 bindkey = [g] CMD_AUTOFIGHT
 
 
-runrest_ignore_message ^= You feel.*sick
+#runrest_ignore_message ^= You feel.*sick
 
 
 ############################
@@ -605,7 +605,7 @@ macros += M [ ===load_char_defaults
 macros += M ] ===save_char_defaults
 macros += M o ===enhanced_explore
 
-macros += M + ,
+macros += M + .
 
 
 # Replacing VI keys, so
@@ -1260,21 +1260,27 @@ end
 {
 function ready()
 
-  -- force_mores.lua
   force_mores()
-  -- char_defaults.lua
   char_defaults()
 
-  -- AnnounceDamage()
   AnnounceDamage()
 
+  
+  if not player_level then
+    player_level = 1
+  end
+  
+  if you.xl() > player_level then
+    player_level = you.xl()
+    crawl.sendkeys("m")
+  end
 
 end
 }
 
 {
 function enhanced_explore()
-   if you.status():find("contam") or you.status("berserk cooldown") or you.status("short of breath") or you.status("corroded") or you.status("vulnerable") then
+   if you.status():find("contam") or you.status("on berserk cooldown") or you.status("short of breath") or you.status("corroded") or you.status("vulnerable") then
       crawl.do_commands({"CMD_REST"})
    elseif you.status("slowed") then
       if not (you.strength() <=0 or you.intelligence() <= 0 or you.dexterity() <=0) then
