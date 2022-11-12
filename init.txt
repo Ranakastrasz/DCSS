@@ -192,6 +192,8 @@ tile_window_width = 1300
 tile_window_height = 700
 tile_full_screen = false
 tile_map_pixels = 3
+tile_show_threat_levels = trivial easy tough nasty
+
 
 
 ###################
@@ -201,7 +203,6 @@ tile_map_pixels = 3
 # These should match the item_glyph colours exactly when possible.
 # For menu_colour, the first match ignores subsequent matches.
 menu := menu_colour
-menu =
 
 # Many of the entries below come from dat/defaults/menu_colours.txt,
 # which we have to duplicate here since we want only some of the
@@ -289,7 +290,7 @@ menu += lightmagenta:unidentified.*artefact.*
 menu += white:.*artefact.*
 menu += lightblue:unidentified .*(potion|scroll|wand|jewellery|spellbook|rod|magical staff)
 
-menu += inventory:lightgray:.*(book|jewellery|magical staff)
+#menu += inventory:lightgray:.*(book|jewellery|magical staff)
 # Ego items
 menu += lightblue:unidentified.*weapon.*(runed|glowing|enchanted)
 menu += lightblue:unidentified.*armour.*(runed|glowing|embroidered|shiny|dyed)
@@ -298,18 +299,18 @@ menu += lightblue:unidentified.*armour.*(runed|glowing|embroidered|shiny|dyed)
 
 
 
-menu += lightcyan:.*ring of (dexterity|strength|intelligence)
-menu += lightmagenta:.*ring of (evasion|protection|slaying)
-menu += green:.*ring of (protection from|resist corrosion|poison resistance|positive energy|willpower)
-menu += magenta:.*ring of (wizardry|magical power)
-menu += cyan:.*ring of (fire|ice)
+menu += lightcyan:ring of (dexterity|strength|intelligence)
+menu += lightmagenta:ring of (evasion|protection|slaying)
+menu += green:ring of (protection from|resist corrosion|poison resistance|positive energy|willpower)
+menu += magenta:ring of (wizardry|magical power)
+menu += cyan:ring of (fire|ice)
 
 menu += lightgreen:.*amulet of (the acrobat|guardian spirit|reflection)
 menu += lightred:.*amulet of.*regeneration
 menu += cyan:.*amulet of faith
 
 menu += white:identified.*artefact.*(jewellery)
-menu += lightmagenta:unidentified.*artefact.*(jewellery).*
+menu += lightmagenta:unidentified.*artefact.*(jewellery)
 
 
 #################
@@ -706,10 +707,14 @@ show_god_gift = unident
 
 ai := autoinscribe
 
-ai += .*potion:!q
+#ai += .*potion:!q
 #ai += .*scroll:!r
 
-# Double Confirmationai += scrolls? of (summoning|silence|vulnerability|immolation|fog|butterflies|teleport|fear|torment):!r
+
+
+ai += potions? of (?!.*(attraction|lignification|mutation)):!q
+ai += scrolls? of (butterflies|fear|fog|magic mapping|posion|silence|summoning|teleportation|torment|vulnerability):!r
+
 
 ai += of faith:!P
 ai += manual of:!d
@@ -719,40 +724,18 @@ ai += magical staff:!a
 ai += (large rock|throwing net|of dispersal):=f
 
 # Convenient shortcuts
-ai += of curing:@q1
-ai += of heal wounds:@q2
-ai += of haste:@q3
-ai += of cancellation:@q4
-ai += of identify:@r1
-ai += of blink:@r2
-ai += of teleportation:@r3
+# These seem to break the script, having more than one match maybe.
+# ai += of curing:@q1
+# ai += of heal wounds:@q2
+# ai += of haste:@q3
+# ai += of cancellation:@q4
+# ai += of identify:@r1
+# ai += of blink:@r2
+# ai += of teleportation:@r3
 
 ai += datura:Berserk =f
 ai += atropa:Blindness =f
 ai += curare:Toxic =f
-
-#ai += potion:!q
-#ai += scroll:!r
-
-ai += \+[0-9]{1,2} robe                      :0
-ai += \+[0-9]{1,2} leather armour            :1
-ai += \+[0-9]{1,2} ring mail                 :2
-ai += \+[0-9]{1,2} scale mail                :3
-ai += \+[0-9]{1,2} chain mail                :4
-ai += \+[0-9]{1,2} plate armour              :5
-ai += \+[0-9]{1,2} crystal plate armour      :6
-ai += \+[0-9]{1,2} animal skin               :0
-ai += \+[0-9]{1,2} troll leather armour      :1+
-ai += \+[0-9]{1,2} steam dragon scales       :2+
-ai += \+[0-9]{1,2} acid dragon scales        :3+
-ai += \+[0-9]{1,2} swamp dragon scales       :3+
-ai += \+[0-9]{1,2} quicksilver dragon scales :4+
-ai += \+[0-9]{1,2} fire dragon scales        :4+
-ai += \+[0-9]{1,2} ice dragon scales         :4+
-ai += \+[0-9]{1,2} pearl dragon scales       :5+
-ai += \+[0-9]{1,2} shadow dragon scales      :5+
-ai += \+[0-9]{1,2} storm dragon scales       :5+
-ai += \+[0-9]{1,2} gold dragon scales        :6+
 
 # Rogues Stab Confidently
 
@@ -2335,7 +2318,7 @@ end
 
 {
 function enhanced_explore()
-   if you.status():find("contam") or you.status("berserking") or you.status("on berserk cooldown") or you.status("short of breath") or you.status("corroded") or you.status("vulnerable") or you.status("poisoned") then
+   if you.status():find("contam") or you.berserk() or you.status("on berserk cooldown") or you.status("short of breath") or you.status("corroded") or you.status("vulnerable") or you.status("poisoned") then
       crawl.do_commands({"CMD_REST"})
    elseif you.status("slowed") then
       if not (you.strength() <=0 or you.intelligence() <= 0 or you.dexterity() <=0) then
